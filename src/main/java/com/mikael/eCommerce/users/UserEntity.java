@@ -12,6 +12,10 @@ public class UserEntity {
     @Column(nullable = false)
     private String email;
 
+    public UserEntity(){
+
+    }
+
     public Long getId() {
         return id;
     }

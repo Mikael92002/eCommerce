@@ -24,6 +24,10 @@ public class CartEntity {
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
+    public CartEntity(){
+
+    }
+
     public Long getId() {
         return id;
     }

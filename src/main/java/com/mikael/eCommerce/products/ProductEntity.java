@@ -15,7 +15,11 @@ public class ProductEntity {
     private BigDecimal price;
     private Integer stockQuantity;
 
-    public long getId() {
+    public ProductEntity(){
+
+    }
+
+    public Long getId() {
         return id;
     }
 
