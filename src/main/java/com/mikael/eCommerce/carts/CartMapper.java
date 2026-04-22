@@ -14,7 +14,7 @@ public class CartMapper {
         CartEntity cartEntity = new CartEntity();
         cartEntity.setUser(user);
         cartEntity.setProduct(product);
-        cartEntity.setQuantity(cartDTO.getQuantity());
+        cartEntity.setQuantity(cartDTO.quantity());
         return cartEntity;
     }
 }

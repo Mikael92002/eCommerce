@@ -28,10 +28,10 @@ public class CartService {
     @Transactional
     public CartDTO createCart(CartDTO cart, Long userId, Long productId) {
         if (cartRepository.findByUser_IdAndProduct_Id(userId, productId).isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Cart already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "CREATE FAILED: Cart already exists");
         }
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
-        ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found"));
+        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CREATE FAILED: User not found"));
+        ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CREATE FAILED: Product not found"));
         CartEntity createdCart = this.cartRepository.save(this.cartMapper.toEntity(cart, user, product));
         return this.cartMapper.toDTO(createdCart);
     }
@@ -42,7 +42,7 @@ public class CartService {
 
     @Transactional
     public CartDTO updateCartQuantity(int newQuantity, Long userId, Long productId) {
-        CartEntity cart = cartRepository.findByUser_IdAndProduct_Id(userId, productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Cart does not exist"));
+        CartEntity cart = cartRepository.findByUser_IdAndProduct_Id(userId, productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UPDATE FAILED: Cart not found"));
         cart.setQuantity(newQuantity);
         return cartMapper.toDTO(cart);
     }
@@ -50,10 +50,9 @@ public class CartService {
     @Transactional
     public void deleteByUser_Id(Long userId) {
         boolean exists = userRepository.existsById(userId);
-        if (exists) {
-            cartRepository.deleteByUser_Id(userId);
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        if (!exists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE FAILED: User not found");
         }
+        cartRepository.deleteByUser_Id(userId);
     }
 }

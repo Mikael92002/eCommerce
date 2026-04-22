@@ -1,9 +1,10 @@
 package com.mikael.eCommerce.products;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.awt.print.Pageable;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -16,4 +17,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByNameContainingIgnoreCase(String keyword);
 
     List<ProductEntity> findByStockQuantityLessThan(Integer threshold);
+
+    boolean existsByName(String name);
 }
