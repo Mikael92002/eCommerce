@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class CartMapper {
     public CartDTO toDTO(CartEntity cart) {
-        return new CartDTO(cart.getQuantity(), cart.getProduct().getName());
+        return new CartDTO(cart.getId(), cart.getQuantity(), cart.getProduct().getName());
     }
 
     public CartEntity toEntity(CartDTO cartDTO, UserEntity user, ProductEntity product) {
