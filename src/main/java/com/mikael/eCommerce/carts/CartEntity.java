@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "cart_entity", uniqueConstraints = {
         @UniqueConstraint(
-                columnNames = {"user_id", "product_id"} // user id and product id come from foreign key
+                columnNames = {"user_id", "product_id"} // user id and product id come from foreign keys below
         )
 })
 public class CartEntity {
@@ -18,10 +18,10 @@ public class CartEntity {
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "user_id") // foreign key user_id points to id column in UserEntity
+    @JoinColumn(name = "user_id", nullable = false) // foreign key user_id points to id column in UserEntity
     private UserEntity user;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
     public CartEntity(){

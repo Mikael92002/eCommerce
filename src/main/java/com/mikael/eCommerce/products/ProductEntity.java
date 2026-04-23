@@ -9,7 +9,7 @@ public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
     @Column(precision=10,scale=2)
     private BigDecimal price;
