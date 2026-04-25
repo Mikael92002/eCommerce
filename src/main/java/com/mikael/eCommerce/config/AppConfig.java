@@ -45,7 +45,9 @@ public class AppConfig {
 
                         return cfg;
                     }
-                })).httpBasic(Customizer.withDefaults()).formLogin(Customizer.withDefaults());
+                })).httpBasic(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
+                .headers(headers->headers.frameOptions(frameOptionsConfig -> frameOptionsConfig.sameOrigin()));
         return http.build();
     }
 

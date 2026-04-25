@@ -1,5 +1,8 @@
 package com.mikael.eCommerce.products;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ProductMapper {
     public ProductDTO toDTO(ProductEntity product){
         return new ProductDTO(product.getId(), product.getName(), product.getPrice(), product.getStockQuantity());
