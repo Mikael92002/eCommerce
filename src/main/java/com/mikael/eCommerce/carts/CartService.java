@@ -32,7 +32,9 @@ public class CartService {
         }
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CREATE FAILED: User not found"));
         ProductEntity product = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "CREATE FAILED: Product not found"));
-        CartEntity createdCart = this.cartRepository.save(this.cartMapper.toEntity(cart, user, product));
+        CartEntity createdCart = this.cartMapper.toEntity(cart);
+        createdCart.setUser(user);
+        createdCart.setProduct(product);
         return this.cartMapper.toDTO(createdCart);
     }
 

@@ -1,5 +1,7 @@
 package com.mikael.eCommerce.orderItems;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mikael.eCommerce.orders.OrderEntity;
 import com.mikael.eCommerce.products.ProductEntity;
 import jakarta.persistence.*;
@@ -25,7 +27,8 @@ public class OrderItemEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "order_entity_id")
+    @JoinColumn(name = "order_id")
+    @JsonBackReference
     private OrderEntity order;
 
     @ManyToOne
@@ -39,5 +42,41 @@ public class OrderItemEntity {
 
     public OrderItemEntity(){
 
+    }
+
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public ProductEntity getProduct() {
+        return product;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
+    public void setProduct(ProductEntity product) {
+        this.product = product;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

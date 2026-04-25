@@ -5,7 +5,7 @@ import com.mikael.eCommerce.users.UserEntity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "cart_entity", uniqueConstraints = {
+@Table(name = "cart_item_entity", uniqueConstraints = {
         @UniqueConstraint(
                 columnNames = {"user_id", "product_id"} // user id and product id come from foreign keys below
         )

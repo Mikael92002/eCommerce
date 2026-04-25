@@ -1,5 +1,6 @@
 package com.mikael.eCommerce.orders;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mikael.eCommerce.orderItems.OrderItemEntity;
 import com.mikael.eCommerce.payments.PaymentEntity;
 import com.mikael.eCommerce.products.ProductEntity;
@@ -28,6 +29,7 @@ public class OrderEntity {
     private UserEntity user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
