@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 // bought more than once
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "order_id"})})
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -40,7 +41,7 @@ public class OrderItemEntity {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    public OrderItemEntity(){
+    public OrderItemEntity() {
 
     }
 

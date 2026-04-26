@@ -22,7 +22,12 @@ public class OrderEntity {
     private Long id;
 
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private Instant placedAt = Instant.now();
+    private Instant placedAt;
+
+    @PrePersist
+    protected void onCreate(){
+        this.placedAt = Instant.now();
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,7 +38,7 @@ public class OrderEntity {
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="payment_id", nullable = false)
+    @JoinColumn(name="payment_id")
     private PaymentEntity payment;
 
     @Column(nullable = false, precision = 10, scale = 2)
