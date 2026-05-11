@@ -24,19 +24,19 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtService jwtService;
+    private final JwtUtils jwtUtils;
     private final CustomUserDetailsService userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
-    public SecurityConfig(JwtService jwtService, CustomUserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler){
-        this.jwtService = jwtService;
+    public SecurityConfig(JwtUtils jwtUtils, CustomUserDetailsService userDetailsService, AuthEntryPointJwt unauthorizedHandler){
+        this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new JwtAuthenticationFilter(jwtService, userDetailsService);
+        return new JwtAuthenticationFilter(jwtUtils, userDetailsService);
     }
 
     @Bean

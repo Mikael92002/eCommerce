@@ -4,6 +4,8 @@ package com.mikael.eCommerce.config;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,17 +15,19 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.util.Date;
-import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtUtils {
 
-    private static final Logger log = LoggerFactory.getLogger(JwtService.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     @Value("${jwt.expiration-ms}")
     private long jwtExpirationMs;
+
+    @Value("${jwt.cookieName}")
+    private String cookieName;
 
     private SecretKey getSigningKey(){
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);

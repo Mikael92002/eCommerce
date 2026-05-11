@@ -2,15 +2,16 @@ package com.mikael.eCommerce.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,12 +22,14 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final JwtService jwtService;
+    private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
-    private static final String BEARER_ = "Bearer ";
 
-    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
-        this.jwtService = jwtService;
+    @Value("${jwt.cookieName}")
+    private String cookieName;
+
+    public JwtAuthenticationFilter(JwtUtils jwtUtils, UserDetailsService userDetailsService) {
+        this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
     }
 
@@ -35,9 +38,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // to get the Authorization header:
             String jwt = parseJwt(request);
-            if (jwt != null && jwtService.validateJwtToken(jwt)) {
-                // extract username from jwt token:
-                final String username = jwtService.getUserFromToken(jwt);
+            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                // get username from jwt token:
+                final String username = jwtUtils.getUserFromToken(jwt);
 
                 // get user from db:
                 final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -51,7 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
             }
-        } catch(Exception e){
+        } catch (Exception e) {
             log.error("Cannot set user authentication: {}", e.getMessage());
         }
         filterChain.doFilter(request, response);
@@ -59,11 +62,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // HELPER METHOD (STRING EXTRACTION)
     public String parseJwt(HttpServletRequest request) {
-        // request.getHeader("Authorization") = Bearer aklsdfjlakdfj...
-        String headerAuth = request.getHeader("Authorization");
-        if (headerAuth != null && headerAuth.startsWith(BEARER_)) {
-            return headerAuth.substring(BEARER_.length());
+        // request.getCookies() = { cookieName: askdlfjoiirqendsfl....}
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) return null;
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals(cookieName)) {
+                return cookie.getValue();
+            }
         }
         return null;
     }
+
+
 }
