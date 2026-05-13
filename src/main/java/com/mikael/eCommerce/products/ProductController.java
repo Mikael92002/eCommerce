@@ -1,5 +1,7 @@
 package com.mikael.eCommerce.products;
 
+import com.mikael.eCommerce.products.DTOs.ProductRequestDTO;
+import com.mikael.eCommerce.products.DTOs.ProductResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,12 +23,12 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public List<ProductDTO> getProductsFromName(@RequestParam String name) {
+    public List<ProductResponseDTO> getProductsFromName(@RequestParam String name) {
         return this.productService.findByNameContainingIgnoreCase(name);
     }
 
     @GetMapping("/between")
-    public Page<ProductDTO> getProductsBetweenPrice(@RequestParam(defaultValue = "0") BigDecimal low, @RequestParam(defaultValue = "100000") BigDecimal high, @PageableDefault(size = 20, sort = "price") Pageable pageable) {
+    public Page<ProductResponseDTO> getProductsBetweenPrice(@RequestParam(defaultValue = "0") BigDecimal low, @RequestParam(defaultValue = "100000") BigDecimal high, @PageableDefault(size = 20, sort = "price") Pageable pageable) {
         if (low.compareTo(high) > 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Low price cannot be higher than high price");
         }
@@ -34,18 +36,18 @@ public class ProductController {
     }
 
     @GetMapping("/greater")
-    public List<ProductDTO> getProductsWithStockGreaterThan(@RequestParam(defaultValue = "0") Integer amount) {
+    public List<ProductResponseDTO> getProductsWithStockGreaterThan(@RequestParam(defaultValue = "0") Integer amount) {
         return this.productService.findByStockQuantityGreaterThan(amount);
     }
 
     @GetMapping("/lesser")
-    public List<ProductDTO> getProductsWithStockLessThan(@RequestParam(defaultValue = "100000") Integer amount) {
+    public List<ProductResponseDTO> getProductsWithStockLessThan(@RequestParam(defaultValue = "100000") Integer amount) {
         return this.productService.findByStockQuantityLessThan(amount);
     }
 
     @PostMapping("/")
-    public ProductDTO createProduct(@RequestBody ProductDTO productDTO) {
-        return this.productService.createProduct(productDTO);
+    public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
+        return this.productService.createProduct(productRequestDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -54,11 +56,11 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/")
-    public ProductDTO updateProduct(@RequestBody ProductDTO productDTO) {
-        if(productDTO.id() == null){
+    @PutMapping("/{id}")
+    public ProductResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productRequestDTO) {
+        if(id == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product id not specified");
         }
-        return this.productService.updateProduct(productDTO);
+        return this.productService.updateProduct(id, productRequestDTO);
     }
 }

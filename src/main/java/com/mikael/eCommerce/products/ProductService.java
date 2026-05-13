@@ -1,5 +1,7 @@
 package com.mikael.eCommerce.products;
 
+import com.mikael.eCommerce.products.DTOs.ProductRequestDTO;
+import com.mikael.eCommerce.products.DTOs.ProductResponseDTO;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,48 +22,45 @@ public class ProductService {
         this.productMapper = productMapper;
     }
 
-    public List<ProductDTO> findByStockQuantityGreaterThan(Integer amount) {
+    public List<ProductResponseDTO> findByStockQuantityGreaterThan(Integer amount) {
         List<ProductEntity> productEntityList = this.productRepository.findByStockQuantityGreaterThan(amount);
-        return productEntityList.stream().map(product -> productMapper.toDTO(product)).toList();
+        return productEntityList.stream().map(product -> productMapper.toResponseDTO(product)).toList();
     }
 
-    public Page<ProductDTO> findByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable) {
+    public Page<ProductResponseDTO> findByPriceBetween(BigDecimal min, BigDecimal max, Pageable pageable) {
         Page<ProductEntity> productEntityList = this.productRepository.findByPriceBetween(min, max, pageable);
-        return productEntityList.map(product -> productMapper.toDTO(product));
+        return productEntityList.map(product -> productMapper.toResponseDTO(product));
     }
 
-    public List<ProductDTO> findByNameContainingIgnoreCase(String keyword) {
+    public List<ProductResponseDTO> findByNameContainingIgnoreCase(String keyword) {
         List<ProductEntity> productEntityList = this.productRepository.findByNameContainingIgnoreCase(keyword);
-        return productEntityList.stream().map(product -> productMapper.toDTO(product)).toList();
+        return productEntityList.stream().map(product -> productMapper.toResponseDTO(product)).toList();
     }
 
-    public List<ProductDTO> findByStockQuantityLessThan(Integer threshold) {
+    public List<ProductResponseDTO> findByStockQuantityLessThan(Integer threshold) {
         List<ProductEntity> productEntityList = this.productRepository.findByStockQuantityLessThan(threshold);
-        return productEntityList.stream().map(product -> productMapper.toDTO(product)).toList();
+        return productEntityList.stream().map(product -> productMapper.toResponseDTO(product)).toList();
     }
 
     @Transactional
-    public ProductDTO createProduct(ProductDTO productDTO) {
-        boolean exists = this.productRepository.existsByName(productDTO.name());
+    public ProductResponseDTO createProduct(ProductRequestDTO productResponseDTO) {
+        boolean exists = this.productRepository.existsByName(productResponseDTO.name());
         if (exists) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "CREATE FAILED: Product already exists");
         }
-        ProductEntity product = productMapper.toEntity(productDTO);
+        ProductEntity product = productMapper.toEntity(productResponseDTO);
         product.setId(null); // if front end doesn't set id to null in POST request
         ProductEntity createdProduct = this.productRepository.save(product);
-        return productMapper.toDTO(createdProduct);
+        return productMapper.toResponseDTO(createdProduct);
     }
 
     @Transactional
-    public ProductDTO updateProduct(ProductDTO productDTO) {
-        ProductEntity productEntity = this.productRepository.findById(productDTO.id()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UPDATE FAILED: Product not found"));
-        productEntity.setName(productDTO.name());
-        productEntity.setPrice(productDTO.price());
-        productEntity.setStockQuantity(productDTO.stockQuantity());
-
+    public ProductResponseDTO updateProduct(Long id, ProductRequestDTO productRequestDTO) {
+        ProductEntity productEntity = this.productRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "UPDATE FAILED: Product not found"));
+        productMapper.updateEntityFromDTO(productRequestDTO, productEntity);
         // MAP TO DTO:
         this.productRepository.save(productEntity);
-        return productMapper.toDTO(productEntity);
+        return productMapper.toResponseDTO(productEntity);
     }
 
     @Transactional
