@@ -1,5 +1,6 @@
 package com.mikael.eCommerce.orders;
 
+import com.mikael.eCommerce.orders.DTOs.OrderRequestDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +15,11 @@ public class OrderService {
         this.orderMapper = orderMapper;
     }
 
-    public List<OrderDTO> getOrdersByUser_Id(Long id){
+    public List<OrderRequestDTO> getOrdersByUser_Id(Long id){
         List<OrderEntity> orders = this.orderRepository.findByUser_Id(id);
-        List<OrderDTO> orderDTOS = orders.stream().map(order->this.orderMapper.toDTO(order)).toList();
+        List<OrderRequestDTO> orderRequestDTOS = orders.stream().map(order->this.orderMapper.toDTO(order)).toList();
 
-        return orderDTOS;
+        return orderRequestDTOS;
     }
 
 
