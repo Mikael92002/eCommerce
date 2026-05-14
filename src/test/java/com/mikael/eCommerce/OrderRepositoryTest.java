@@ -8,6 +8,7 @@ import com.mikael.eCommerce.payments.PaymentEntity;
 import com.mikael.eCommerce.payments.PaymentRepository;
 import com.mikael.eCommerce.products.ProductEntity;
 import com.mikael.eCommerce.products.ProductRepository;
+import com.mikael.eCommerce.roles.RoleEnum;
 import com.mikael.eCommerce.users.UserEntity;
 import com.mikael.eCommerce.users.UserRepository;
 import jakarta.transaction.Transactional;
@@ -73,7 +74,7 @@ public class OrderRepositoryTest {
         UserEntity user = new UserEntity();
         user.setEmail("mikael@gmail.com");
         user.setPassword("123");
-        user.setRole("admin");
+        user.setRole(RoleEnum.USER);
         user.setUsername("mikael92002");
         this.userRepository.save(user);
 

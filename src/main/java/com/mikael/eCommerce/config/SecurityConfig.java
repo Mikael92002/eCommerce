@@ -57,9 +57,12 @@ public class SecurityConfig {
                 .exceptionHandling(e->e.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // because JWT is stateless, do not use HTTP sessions
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/**").hasAuthority("user")
-                        .requestMatchers("/api/admin/**").hasAuthority("admin")
+                        // only users and admins can access:
+                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        // only matches api/something. NOT: api/something/
                         .requestMatchers("/api/**").permitAll()
+                        // every other request requires jwt auth:
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -1,5 +1,6 @@
 package com.mikael.eCommerce.config;
 
+import com.mikael.eCommerce.roles.RoleEnum;
 import com.mikael.eCommerce.users.UserEntity;
 import com.mikael.eCommerce.users.UserRepository;
 import jakarta.servlet.http.Cookie;
@@ -77,7 +78,7 @@ public class AuthenticationController {
         // should be mapped by DTO:
         final UserEntity newUser = new UserEntity();
         newUser.setEmail(user.getEmail());
-        newUser.setRole(user.getRole());
+        newUser.setRole(RoleEnum.USER);
         newUser.setUsername(user.getUsername());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 

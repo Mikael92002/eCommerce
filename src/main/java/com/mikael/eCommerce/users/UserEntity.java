@@ -1,9 +1,17 @@
 package com.mikael.eCommerce.users;
 
+import com.mikael.eCommerce.roles.RoleEnum;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -13,8 +21,10 @@ public class UserEntity {
     private String email;
     @Column(nullable = false)
     private String password;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role;
+    private RoleEnum role;
 
     public UserEntity(){
 
@@ -32,11 +42,16 @@ public class UserEntity {
         return username;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + this.role.name()));
+    }
+
     public String getPassword() {
         return password;
     }
 
-    public String getRole() {
+    public RoleEnum getRole() {
         return role;
     }
 
@@ -56,7 +71,7 @@ public class UserEntity {
         this.password = password;
     }
 
-    public void setRole(String role) {
+    public void setRole(RoleEnum role) {
         this.role = role;
     }
 }

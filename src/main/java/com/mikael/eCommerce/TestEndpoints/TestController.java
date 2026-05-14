@@ -15,7 +15,7 @@ public class TestController {
 
     @GetMapping("/user")
     public String userAccessOnly(){
-        return "Only users w/ jwt can access";
+        return "Only users and admins w/ jwt can access";
     }
 
     @GetMapping("/admin")

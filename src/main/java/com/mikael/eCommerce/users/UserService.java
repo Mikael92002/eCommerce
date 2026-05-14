@@ -1,9 +1,13 @@
 package com.mikael.eCommerce.users;
 
+import com.mikael.eCommerce.roles.RoleEnum;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -29,7 +33,7 @@ public class UserService {
 
         UserEntity newUser = new UserEntity();
         newUser.setUsername(username);
-        newUser.setRole("USER");
+        newUser.setRole(RoleEnum.USER);
         newUser.setEmail(cleanEmail);
         newUser.setPassword(encoded);
 
@@ -40,5 +44,10 @@ public class UserService {
 
     public boolean verifyPassword(String rawPassword, String encodedPassword){
         return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserEntity> getAllUsers(){
+        return this.userRepository.findAll();
     }
 }

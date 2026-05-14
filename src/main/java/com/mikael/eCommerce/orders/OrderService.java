@@ -2,7 +2,11 @@ package com.mikael.eCommerce.orders;
 
 import com.mikael.eCommerce.orders.DTOs.OrderRequestDTO;
 import com.mikael.eCommerce.orders.DTOs.OrderResponseDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -23,5 +27,11 @@ public class OrderService {
         return orderResponseDTOs;
     }
 
-
+    @PreAuthorize("hasAuthority('user')")
+    public void deleteOrderById(Long id){
+        if(!this.orderRepository.existsById(id)){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "DELETE FAILED: Order does not exist");
+        }
+        this.orderRepository.deleteById(id);
+    }
 }
