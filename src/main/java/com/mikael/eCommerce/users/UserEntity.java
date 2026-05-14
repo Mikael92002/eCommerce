@@ -2,6 +2,7 @@ package com.mikael.eCommerce.users;
 
 import com.mikael.eCommerce.roles.RoleEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,10 +16,15 @@ public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min=8, max = 50, message = "Username must be greater than 8 and less than 50 characters long")
     private String username;
+
     @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false)
     private String password;
 

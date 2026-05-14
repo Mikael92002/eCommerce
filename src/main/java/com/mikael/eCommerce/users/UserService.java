@@ -1,6 +1,8 @@
 package com.mikael.eCommerce.users;
 
 import com.mikael.eCommerce.roles.RoleEnum;
+import com.mikael.eCommerce.users.DTOs.UserRegistrationDTO;
+import com.mikael.eCommerce.users.DTOs.UserResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,18 +23,18 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserDTO createUser(String username, String email, String rawPassword){
-        if(userRepository.findByEmail(email).isPresent()){
+    public UserResponseDTO createUser(UserRegistrationDTO userRegistrationDTO){
+        if(userRepository.findByEmail(userRegistrationDTO.email()).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "CREATE FAILED: Email already exists");
         }
-        if(userRepository.findByUsername(username).isPresent()){
+        if(userRepository.findByUsername(userRegistrationDTO.username()).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "CREATE FAILED: Username already exists");
         }
-        String encoded = passwordEncoder.encode(rawPassword);
-        String cleanEmail = email.toLowerCase().strip();
+        String encoded = passwordEncoder.encode(userRegistrationDTO.password());
+        String cleanEmail = userRegistrationDTO.email().toLowerCase().strip();
 
         UserEntity newUser = new UserEntity();
-        newUser.setUsername(username);
+        newUser.setUsername(userRegistrationDTO.username());
         newUser.setRole(RoleEnum.USER);
         newUser.setEmail(cleanEmail);
         newUser.setPassword(encoded);

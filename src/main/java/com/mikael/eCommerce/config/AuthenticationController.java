@@ -1,11 +1,16 @@
 package com.mikael.eCommerce.config;
 
 import com.mikael.eCommerce.roles.RoleEnum;
+import com.mikael.eCommerce.users.DTOs.UserRegistrationDTO;
+import com.mikael.eCommerce.users.DTOs.UserRequestDTO;
+import com.mikael.eCommerce.users.DTOs.UserResponseDTO;
 import com.mikael.eCommerce.users.UserEntity;
 import com.mikael.eCommerce.users.UserRepository;
+import com.mikael.eCommerce.users.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -37,19 +42,25 @@ public class AuthenticationController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
+    private final UserService userService;
 
-    public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtils jwtUtils){
+    public AuthenticationController(AuthenticationManager authenticationManager,
+                                    UserRepository userRepository,
+                                    PasswordEncoder passwordEncoder,
+                                    JwtUtils jwtUtils,
+                                    UserService userService){
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<Object> authenticateUser(@RequestBody UserEntity user, HttpServletResponse response){
+    public ResponseEntity<Object> authenticateUser(@RequestBody UserRequestDTO user, HttpServletResponse response){
         // should be in a service class:
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                new UsernamePasswordAuthenticationToken(user.username(), user.password())
         );
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -69,22 +80,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public String registerUser(@RequestBody UserEntity user){
-        // should be in a service class:
-        if(userRepository.existsByUsername(user.getUsername())){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "SIGN UP FAILED: Username already exists");
-        }
-
-        // should be mapped by DTO:
-        final UserEntity newUser = new UserEntity();
-        newUser.setEmail(user.getEmail());
-        newUser.setRole(RoleEnum.USER);
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        this.userRepository.save(newUser);
-        // Return created user dto here (?):
-        return "User registered successfully";
+    public UserResponseDTO registerUser(@Valid @RequestBody UserRegistrationDTO user){
+        return this.userService.createUser(user);
     }
 
     @PostMapping("/signout")
