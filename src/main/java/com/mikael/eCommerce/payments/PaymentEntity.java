@@ -1,5 +1,7 @@
 package com.mikael.eCommerce.payments;
 
+import com.mikael.eCommerce.enums.CurrencyEnum;
+import com.mikael.eCommerce.enums.PaymentStatusEnum;
 import com.mikael.eCommerce.orders.OrderEntity;
 import com.mikael.eCommerce.users.UserEntity;
 import jakarta.persistence.*;
@@ -16,10 +18,10 @@ public class PaymentEntity {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private String currency;
+    private CurrencyEnum currency;
 
     @Column(nullable = false)
-    private String status; //"PENDING", "COMPLETED", "REFUNDED"
+    private PaymentStatusEnum status; //"PENDING", "COMPLETED", "REFUNDED"
 
     @Column(unique = true)
     private String externalTransactionId; // comes from Stripe
@@ -51,7 +53,7 @@ public class PaymentEntity {
         return order;
     }
 
-    public String getCurrency() {
+    public CurrencyEnum getCurrency() {
         return currency;
     }
 
@@ -59,7 +61,7 @@ public class PaymentEntity {
         return externalTransactionId;
     }
 
-    public String getStatus() {
+    public PaymentStatusEnum getStatus() {
         return status;
     }
 
@@ -71,11 +73,7 @@ public class PaymentEntity {
         this.user = user;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setCurrency(String currency) {
+    public void setCurrency(CurrencyEnum currency) {
         this.currency = currency;
     }
 
@@ -87,7 +85,7 @@ public class PaymentEntity {
         this.order = order;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(PaymentStatusEnum status) {
         this.status = status;
     }
 }

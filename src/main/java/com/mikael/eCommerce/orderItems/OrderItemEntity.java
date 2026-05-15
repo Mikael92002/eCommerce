@@ -1,7 +1,6 @@
 package com.mikael.eCommerce.orderItems;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mikael.eCommerce.orders.OrderEntity;
 import com.mikael.eCommerce.products.ProductEntity;
 import jakarta.persistence.*;

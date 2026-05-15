@@ -1,6 +1,6 @@
 package com.mikael.eCommerce.users;
 
-import com.mikael.eCommerce.roles.RoleEnum;
+import com.mikael.eCommerce.enums.RoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Entity
 public class UserEntity implements UserDetails {

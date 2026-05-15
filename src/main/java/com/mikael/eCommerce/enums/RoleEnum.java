@@ -1,4 +1,4 @@
-package com.mikael.eCommerce.roles;
+package com.mikael.eCommerce.enums;
 
 public enum RoleEnum {
     USER,

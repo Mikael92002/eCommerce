@@ -8,11 +8,8 @@ import com.mikael.eCommerce.users.UserEntity;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.time.Clock;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity

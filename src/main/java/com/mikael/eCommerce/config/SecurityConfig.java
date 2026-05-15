@@ -58,7 +58,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // because JWT is stateless, do not use HTTP sessions
                 .authorizeHttpRequests(auth -> auth
                         // only users and admins can access:
-                        .requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/user/**",
+                                "/api/cart/**",
+                                "/api/order/**",
+                                "/api/product/**",
+                                "/api/payment/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // only matches api/something. NOT: api/something/
                         .requestMatchers("/api/**").permitAll()

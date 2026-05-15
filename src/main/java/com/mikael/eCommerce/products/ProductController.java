@@ -45,17 +45,20 @@ public class ProductController {
         return this.productService.findByStockQuantityLessThan(amount);
     }
 
+    // pre authorize with "admin":
     @PostMapping("/")
     public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
         return this.productService.createProduct(productRequestDTO);
     }
 
+    // pre auth w/ admin:
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         this.productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
+    // pre auth w/ admin:
     @PutMapping("/{id}")
     public ProductResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productRequestDTO) {
         if(id == null){

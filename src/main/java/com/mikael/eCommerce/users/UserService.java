@@ -1,6 +1,6 @@
 package com.mikael.eCommerce.users;
 
-import com.mikael.eCommerce.roles.RoleEnum;
+import com.mikael.eCommerce.enums.RoleEnum;
 import com.mikael.eCommerce.users.DTOs.UserRegistrationDTO;
 import com.mikael.eCommerce.users.DTOs.UserResponseDTO;
 import org.springframework.http.HttpStatus;

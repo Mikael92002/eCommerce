@@ -1,5 +1,7 @@
 package com.mikael.eCommerce;
 
+import com.mikael.eCommerce.enums.CurrencyEnum;
+import com.mikael.eCommerce.enums.PaymentStatusEnum;
 import com.mikael.eCommerce.orderItems.OrderItemEntity;
 import com.mikael.eCommerce.orderItems.OrderItemRepository;
 import com.mikael.eCommerce.orders.OrderEntity;
@@ -8,11 +10,10 @@ import com.mikael.eCommerce.payments.PaymentEntity;
 import com.mikael.eCommerce.payments.PaymentRepository;
 import com.mikael.eCommerce.products.ProductEntity;
 import com.mikael.eCommerce.products.ProductRepository;
-import com.mikael.eCommerce.roles.RoleEnum;
+import com.mikael.eCommerce.enums.RoleEnum;
 import com.mikael.eCommerce.users.UserEntity;
 import com.mikael.eCommerce.users.UserRepository;
 import jakarta.transaction.Transactional;
-import org.aspectj.weaver.ast.Or;
 import org.h2.server.web.JakartaWebServlet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
@@ -104,8 +104,8 @@ public class OrderRepositoryTest {
         PaymentEntity payment = new PaymentEntity();
         // get total price (tax included) from stripe:
         payment.setAmount(BigDecimal.valueOf(45.30));
-        payment.setCurrency("$");
-        payment.setStatus("Pending");
+        payment.setCurrency(CurrencyEnum.$);
+        payment.setStatus(PaymentStatusEnum.PENDING);
         payment.setUser(user);
         payment.setOrder(order);
         payment.setExternalTransactionId("sh_something");

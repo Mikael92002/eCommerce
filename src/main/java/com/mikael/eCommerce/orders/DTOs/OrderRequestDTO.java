@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 // from front end to back end:
+// SHOULD INCLUDE PAYMENT EVENTUALLY:
 public record OrderRequestDTO(List<OrderItemDTO> orderItems, String orderStatus, String address, BigDecimal amount) {
 
 }

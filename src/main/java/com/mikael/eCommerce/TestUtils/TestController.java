@@ -1,4 +1,4 @@
-package com.mikael.eCommerce.TestEndpoints;
+package com.mikael.eCommerce.TestUtils;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
