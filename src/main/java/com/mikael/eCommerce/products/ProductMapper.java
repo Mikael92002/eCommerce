@@ -7,7 +7,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProductMapper{
-    // send from backend to front end:
+    // from backend to front end:
     ProductResponseDTO toResponseDTO(ProductEntity product);
     ProductEntity toEntity(ProductRequestDTO dto);
     void updateEntityFromDTO(ProductRequestDTO dto, @MappingTarget ProductEntity entity);
