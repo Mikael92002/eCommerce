@@ -4,7 +4,6 @@ import com.mikael.eCommerce.enums.RoleEnum;
 import com.mikael.eCommerce.users.DTOs.UserRegistrationDTO;
 import com.mikael.eCommerce.users.DTOs.UserResponseDTO;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -48,7 +47,6 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<UserEntity> getAllUsers(){
         return this.userRepository.findAll();
     }

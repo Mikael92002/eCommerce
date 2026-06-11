@@ -108,10 +108,10 @@ public class OrderService {
 
         // set entities user, payment manually:
         orderEntity.setUser(user);
-        // FAKE for now, but should come from front end (NO):
+        // FAKE for now, but should come from front end? (NO):
         PaymentEntity paymentEntity = TestPaymentEntity.fakePayment(orderEntity, user);
         paymentEntity.setOrder(orderEntity);
-        // payment amount should not come from front end (but for now front end):
+        // payment amount should not come from front end (but for now manually set):
         orderEntity.setPayment(paymentEntity);
 
         OrderEntity savedOrder = this.orderRepository.save(orderEntity);

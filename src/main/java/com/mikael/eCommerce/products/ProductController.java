@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -45,20 +46,20 @@ public class ProductController {
         return this.productService.findByStockQuantityLessThan(amount);
     }
 
-    // pre authorize with "admin":
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO productRequestDTO) {
         return this.productService.createProduct(productRequestDTO);
     }
 
-    // pre auth w/ admin:
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         this.productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
-    // pre auth w/ admin:
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ProductResponseDTO updateProduct(@PathVariable Long id, @RequestBody ProductRequestDTO productRequestDTO) {
         if(id == null){
