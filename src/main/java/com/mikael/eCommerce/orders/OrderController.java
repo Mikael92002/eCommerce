@@ -3,6 +3,7 @@ package com.mikael.eCommerce.orders;
 import com.mikael.eCommerce.orders.DTOs.OrderRequestDTO;
 import com.mikael.eCommerce.orders.DTOs.OrderResponseDTO;
 import com.mikael.eCommerce.users.UserEntity;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,7 +26,7 @@ public class OrderController {
     }
 
     @PostMapping("/create")
-    public OrderResponseDTO createOrder(@RequestBody OrderRequestDTO orderRequestDTO, @AuthenticationPrincipal UserEntity user){
+    public OrderResponseDTO createOrder(@Valid @RequestBody OrderRequestDTO orderRequestDTO, @AuthenticationPrincipal UserEntity user){
         return this.orderService.createOrder(orderRequestDTO, user);
     }
 }

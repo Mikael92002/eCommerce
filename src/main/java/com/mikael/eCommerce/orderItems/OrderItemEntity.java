@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mikael.eCommerce.orders.OrderEntity;
 import com.mikael.eCommerce.products.ProductEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -20,7 +21,7 @@ import java.math.BigDecimal;
 // bought more than once
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "order_id"})})
+@Table(uniqueConstraints = {@UniqueConstraint(name = "uk_product_order", columnNames = {"product_id", "order_id"})})
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -29,15 +30,19 @@ public class OrderItemEntity {
     @ManyToOne
     @JoinColumn(name = "order_id")
     @JsonBackReference
+    @NotNull(message = "order cannot be null")
     private OrderEntity order;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @NotNull(message = "product cannot be null")
     private ProductEntity product;
 
     @Column(nullable = false)
+    @NotNull(message = "quantity cannot be null")
     private Integer quantity;
     @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "price cannot be null")
     private BigDecimal price;
 
     public OrderItemEntity() {

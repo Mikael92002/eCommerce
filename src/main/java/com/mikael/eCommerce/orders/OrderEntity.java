@@ -6,6 +6,7 @@ import com.mikael.eCommerce.payments.PaymentEntity;
 import com.mikael.eCommerce.products.ProductEntity;
 import com.mikael.eCommerce.users.UserEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -19,6 +20,7 @@ public class OrderEntity {
     private Long id;
 
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    @NotNull(message = "placedAt cannot be null")
     private Instant placedAt;
 
     @PrePersist
@@ -28,23 +30,29 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @NotNull(message = "user cannot be null")
     private UserEntity user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @NotNull(message = "orderItem list cannot be null")
     private List<OrderItemEntity> orderItems = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="payment_id")
+    @JoinColumn(name="payment_id", nullable = false)
+    @NotNull(message = "payment cannot be null")
     private PaymentEntity payment;
 
     @Column(nullable = false, precision = 10, scale = 2)
+    @NotNull(message = "amount cannot be null")
     private BigDecimal amount;
 
     @Column(nullable = false)
+    @NotNull(message = "orderStatus cannot be null")
     private String orderStatus; // "SHIPPED", "PENDING", "CANCELLED", "DELIVERED"
 
     @Column(nullable = false)
+    @NotNull(message = "address cannot be null")
     private String address;
 
     public OrderEntity(){

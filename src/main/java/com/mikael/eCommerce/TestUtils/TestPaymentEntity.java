@@ -7,6 +7,7 @@ import com.mikael.eCommerce.payments.PaymentEntity;
 import com.mikael.eCommerce.users.UserEntity;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 public class TestPaymentEntity {
 
@@ -21,7 +22,8 @@ public class TestPaymentEntity {
         payment.setStatus(PaymentStatusEnum.PENDING);
         payment.setOrder(order);
         payment.setUser(user);
-        payment.setExternalTransactionId("sk_test_123");
+
+        payment.setExternalTransactionId("sk_test_" + UUID.randomUUID());
 
         return payment;
     }
